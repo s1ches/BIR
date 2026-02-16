@@ -13,8 +13,18 @@ Basics of Information Retrieval
 pip install requests beautifulsoup4 
 ```
 
+Для глобальных окружений к команде выше могут понадобиться префиксы
+
+```python3 -m <pip command>``` или ```py -m <pip command>```
+
 Затем можно запустить приложение из директории ```src/```
 
 ```
 py .\main.py python
+```
+
+или
+
+```
+python3 main.py py
 ```
