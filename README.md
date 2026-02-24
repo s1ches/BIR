@@ -10,7 +10,7 @@ Basics of Information Retrieval
 Для запуска нужно установить две библиотеки - команда для их установки:
 
 ```
-pip install requests beautifulsoup4 
+pip install requests beautifulsoup4 lxml pymorphy3 pymorphy3-dicts-ru nltk razdel
 ```
 
 Для глобальных окружений к команде выше могут понадобиться префиксы
