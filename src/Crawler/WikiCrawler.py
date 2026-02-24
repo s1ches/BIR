@@ -40,7 +40,6 @@ class WikiCrawler:
 
         excluded_postfixes = (
             "static",
-            "load.php",
             "resources",
             "upload",
             ".php",

@@ -17,9 +17,7 @@ except LookupError:
 class Tokenizer:    
     def __init__(self):
         self.stop_words = set(stopwords.words('russian'))
-        custom_stopwords = TokenizerUtils.get_custom_stopwords(TokenizerUtils.STOPWORDS_FILE)
-        print(custom_stopwords)
-        self.stop_words.update(TokenizerUtils.get_custom_stopwords())
+        self.stop_words.update(TokenizerUtils.get_custom_stopwords(TokenizerUtils.STOPWORDS_FILE))
         self.russian_pattern = re.compile(r'^[а-яА-ЯёЁ]+$')
     
     def extract_text_from_html(self, html_content: str) -> str:

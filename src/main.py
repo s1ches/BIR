@@ -21,9 +21,10 @@ def crawl_required(output_dir = CrawlerUtils.OUTPUT_DIR, index_file = CrawlerUti
 
     return False
 
-def tokenization_required(tokens_file = TokenizerUtils.TOKENS_FILE, lemmas_file = TokenizerUtils.LEMMAS_FILE):
-    if not os.path.exists(tokens_file) or not os.path.exists(lemmas_file):
-        return True
+def tokenization_required(output_dir = TokenizerUtils.OUTPUT_DIR, tokens_file = TokenizerUtils.TOKENS_FILE, lemmas_file = TokenizerUtils.LEMMAS_FILE, min_files=200):
+    for i in range(1, min_files//2+1):
+        if not os.path.exists(os.path.join(output_dir, str(i), tokens_file)) or not os.path.exists(os.path.join(output_dir, str(i), lemmas_file)):
+            return True
 
 if __name__ == '__main__':
     need_to_run_crawler = False
@@ -45,7 +46,7 @@ if __name__ == '__main__':
         crawler.crawl()
 
     need_to_run_tokenization = False
-    if tokenization_required(TokenizerUtils.TOKENS_FILE, TokenizerUtils.LEMMAS_FILE):
+    if tokenization_required(TokenizerUtils.OUTPUT_DIR, TokenizerUtils.TOKENS_FILE, TokenizerUtils.LEMMAS_FILE, CrawlerUtils.MAX_PAGES * 2):
         print("Запускаем токенизацию и лемматизацию...")
         need_to_run_tokenization = True
     else:
@@ -54,8 +55,14 @@ if __name__ == '__main__':
     if need_to_run_tokenization:
         html_processor = HtmlProcessor(
             processing_dir = CrawlerUtils.OUTPUT_DIR,
+            output_dir=TokenizerUtils.OUTPUT_DIR,
             tokens_file = TokenizerUtils.TOKENS_FILE,
             lemmas_file = TokenizerUtils.LEMMAS_FILE
         )    
 
-        html_processor.process_documents()
+        txt_files = [
+            f for f in os.listdir(CrawlerUtils.OUTPUT_DIR)
+            if f.endswith(".txt")
+        ]
+        for i in range(1, len(txt_files)+1):
+            html_processor.process_document(str(i))

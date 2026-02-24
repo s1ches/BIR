@@ -1,6 +1,7 @@
 LEMMAS_FILE='lemmas.txt'
 TOKENS_FILE='tokens.txt'
 STOPWORDS_FILE='stopwords.txt'
+OUTPUT_DIR='output_tokenized'
 
 def get_custom_stopwords(filename="stopwords.txt"):
     custom_stops = set()
