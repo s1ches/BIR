@@ -206,3 +206,5 @@ pip-selfcheck.json
 
 output/
 index.txt
+tokens.txt
+lemmas.txt

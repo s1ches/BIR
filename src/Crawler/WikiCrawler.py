@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from collections import deque
-import Parser.Utils
+import Crawler.CrawlerUtils
 
 
 class WikiCrawler:
@@ -14,7 +14,7 @@ class WikiCrawler:
         self.output_dir = output_dir
         self.index_file = index_file
 
-        self.base_domain = Parser.Utils.WIKI_URL
+        self.base_domain = Crawler.CrawlerUtils.WIKI_URL
         self.visited = set()
         self.queue = deque([start_url])
         self.page_count = 0
@@ -40,7 +40,6 @@ class WikiCrawler:
 
         excluded_postfixes = (
             "static",
-            "load.php",
             "resources",
             "upload",
             ".php",
