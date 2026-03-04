@@ -1,8 +1,10 @@
 import os
 from Crawler import CrawlerUtils
 from Crawler.WikiCrawler import WikiCrawler
+from InvertedIndex import InvertedIndexProcessor
 from Tokenizer import TokenizerUtils
 from Tokenizer.HtmlProcessor import HtmlProcessor
+from InvertedIndex.InvertedIndexProcessor import InvertedIndexProcessor
 
 def crawl_required(output_dir = CrawlerUtils.OUTPUT_DIR, index_file = CrawlerUtils.INDEX_FILE, min_files=100):
     if not os.path.exists(output_dir):
@@ -66,3 +68,27 @@ if __name__ == '__main__':
         ]
         for i in range(1, len(txt_files)+1):
             html_processor.process_document(str(i))
+
+    index_filename = "inverted_index.txt"
+    indexer = InvertedIndexProcessor()
+    if not os.path.exists(index_filename):
+        print("Построение инвертированного индекса...")
+        indexer.build(TokenizerUtils.OUTPUT_DIR)
+        indexer.save(index_filename)
+        print(f"Индекс сохранён в {index_filename}")
+    else:
+        indexer.load(index_filename)
+        print(f"Загружен индекс из {index_filename}")
+
+    while True:
+        query = input("\nВведите булев запрос (AND, OR, NOT, скобки). Пустая строка для выхода:\n")
+        if not query.strip():
+            break
+        try:
+            results = indexer.query(query)
+            if results:
+                print("Найденные документы:", ' '.join(sorted(results, key=int)))
+            else:
+                print("Ничего не найдено.")
+        except Exception as e:
+            print("Ошибка при разборе запроса:", e)
