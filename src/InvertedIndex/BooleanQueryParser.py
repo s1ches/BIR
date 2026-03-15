@@ -1,13 +1,11 @@
 import re
 from typing import Set
 
-from InvertedIndex import InvertedIndexProcessor
-
 
 class BooleanQueryParser:
     _token_re = re.compile(r"\(|\)|AND|OR|NOT|[^()\s]+", flags=re.IGNORECASE)
 
-    def __init__(self, index: InvertedIndexProcessor) -> None:
+    def __init__(self, index: "InvertedIndexProcessor") -> None:
         self.index = index
         self.tokens: list[str] = []
         self.pos = 0
