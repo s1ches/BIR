@@ -6,6 +6,8 @@ from Tokenizer.HtmlProcessor import HtmlProcessor
 from InvertedIndex.InvertedIndexProcessor import InvertedIndexProcessor
 from TfIdf import TfIdfUtils
 from TfIdf.TfIdfProcessor import TfIdfProcessor
+from VectorSearch import VectorSearchUtils
+from VectorSearch.VectorSearchEngine import VectorSearchEngine
 
 def crawl_required(output_dir = CrawlerUtils.OUTPUT_DIR, index_file = CrawlerUtils.INDEX_FILE, min_files=100):
     if not os.path.exists(output_dir):
@@ -112,3 +114,20 @@ if __name__ == '__main__':
                 print("Ничего не найдено.")
         except Exception as e:
             print("Ошибка при разборе запроса:", e)
+
+    print("\nИнициализация векторного поиска...")
+    vector_engine = VectorSearchEngine()
+    vector_engine.load(TfIdfUtils.OUTPUT_DIR, CrawlerUtils.MAX_PAGES)
+    vector_engine.load_url_index(CrawlerUtils.INDEX_FILE)
+
+    while True:
+        query = input("\nВведите запрос для векторного поиска. Пустая строка для выхода:\n")
+        if not query.strip():
+            break
+        results = vector_engine.search(query, top_n=VectorSearchUtils.TOP_N)
+        if results:
+            print(f"Топ-{len(results)} результатов:")
+            for rank, (doc_id, url, score) in enumerate(results, start=1):
+                print(f"  {rank}. [doc {doc_id}] (score={score:.6f})")
+        else:
+            print("Ничего не найдено.")
