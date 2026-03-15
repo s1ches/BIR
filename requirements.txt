@@ -5,3 +5,4 @@ razdel
 pymorphy3
 pymorphy3-dicts-ru
 nltk
+flask

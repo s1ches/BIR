@@ -9,8 +9,8 @@ import razdel
 from nltk.corpus import stopwords
 import nltk
 
-from TfIdf import TfIdfUtils
-from Tokenizer import TokenizerUtils
+from src.TfIdf import TfIdfUtils
+from src.Tokenizer import TokenizerUtils
 
 try:
     nltk.data.find('corpora/stopwords')
