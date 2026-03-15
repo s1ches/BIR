@@ -1,10 +1,11 @@
 import os
 from Crawler import CrawlerUtils
 from Crawler.WikiCrawler import WikiCrawler
-from InvertedIndex import InvertedIndexProcessor
 from Tokenizer import TokenizerUtils
 from Tokenizer.HtmlProcessor import HtmlProcessor
 from InvertedIndex.InvertedIndexProcessor import InvertedIndexProcessor
+from TfIdf import TfIdfUtils
+from TfIdf.TfIdfProcessor import TfIdfProcessor
 
 def crawl_required(output_dir = CrawlerUtils.OUTPUT_DIR, index_file = CrawlerUtils.INDEX_FILE, min_files=100):
     if not os.path.exists(output_dir):
@@ -21,6 +22,13 @@ def crawl_required(output_dir = CrawlerUtils.OUTPUT_DIR, index_file = CrawlerUti
     if len(txt_files) < min_files:
         return True
 
+    return False
+
+def tfidf_required(output_dir: str = TfIdfUtils.OUTPUT_DIR, tokens_file: str = TfIdfUtils.TOKENS_TFIDF_FILE, lemmas_file: str = TfIdfUtils.LEMMAS_TFIDF_FILE, n_docs: int = 100) -> bool:
+    for i in range(1, n_docs + 1):
+        if not os.path.exists(os.path.join(output_dir, str(i), tokens_file)) \
+                or not os.path.exists(os.path.join(output_dir, str(i), lemmas_file)):
+            return True
     return False
 
 def tokenization_required(output_dir = TokenizerUtils.OUTPUT_DIR, tokens_file = TokenizerUtils.TOKENS_FILE, lemmas_file = TokenizerUtils.LEMMAS_FILE, min_files=200):
@@ -79,6 +87,18 @@ if __name__ == '__main__':
     else:
         indexer.load(index_filename)
         print(f"Загружен индекс из {index_filename}")
+
+    if tfidf_required(TfIdfUtils.OUTPUT_DIR, TfIdfUtils.TOKENS_TFIDF_FILE, TfIdfUtils.LEMMAS_TFIDF_FILE, CrawlerUtils.MAX_PAGES):
+        print("Вычисление TF-IDF...")
+        tfidf_processor = TfIdfProcessor()
+        tfidf_processor.process_all(
+            crawl_dir=CrawlerUtils.OUTPUT_DIR,
+            tokenized_dir=TokenizerUtils.OUTPUT_DIR,
+            output_dir=TfIdfUtils.OUTPUT_DIR,
+            n_docs=CrawlerUtils.MAX_PAGES,
+        )
+    else:
+        print(f"TF-IDF файлы уже существуют в {TfIdfUtils.OUTPUT_DIR}/. Пропускаем.")
 
     while True:
         query = input("\nВведите булев запрос (AND, OR, NOT, скобки). Пустая строка для выхода:\n")

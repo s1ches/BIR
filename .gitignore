@@ -208,3 +208,5 @@ output/
 index.txt
 tokens.txt
 lemmas.txt
+
+.idea

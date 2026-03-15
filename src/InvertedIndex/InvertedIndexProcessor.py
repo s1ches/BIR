@@ -1,6 +1,7 @@
 import os
 from typing import Set, Dict
-from InvertedIndex import BooleanQueryParser
+
+from InvertedIndex.BooleanQueryParser import BooleanQueryParser
 from Tokenizer import TokenizerUtils
 
 
